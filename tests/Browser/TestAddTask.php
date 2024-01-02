@@ -11,17 +11,17 @@ class TestAddTask extends DuskTestCase
     /**
      * @group add-task
      */
-    public function addTask()
+    public function testAddTask()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
                     ->clickLink('Ajouter tâche')
-                    ->select('2', 'project_id')
-                    ->type('planification', 'name')
-                    ->type('faire une planification', 'description')
+                    ->select('project_id', '2')
+                    ->type('name', 'planification' )
+                    ->type('description', 'faire une planification')
                     ->press('Ajouter')
                     ->assertPathIs('/');
         });
     }
-    
+
 }
