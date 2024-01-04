@@ -10,6 +10,7 @@ class AddTacheTest extends DuskTestCase
 {
     /**
      * A Dusk test example.
+     * @test
      */
     public function testAddTache(): void
     {
@@ -18,10 +19,18 @@ class AddTacheTest extends DuskTestCase
                 ->clickLink('Ajouter tâche')
                 ->select('project_id', '2')
                 ->type('name', 'planification') 
+                // ->assertSee('Nom')
                 ->type('description', 'description de planification') 
-                ->press('Ajouter')
-                ->asserRedirectTo('/');
+                ->press('Ajouter');   
                 // ->seePageIs('/'); 
         });
+    }
+    public function testAddTacheDB(): void
+    {
+        $this->assertDatabaseHas('tasks', [
+            'name' => 'planification',
+            'description' => 'description de planification',
+            'project_id' => '2',
+        ]);
     }
 }
