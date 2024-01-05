@@ -2,9 +2,10 @@
 
 namespace Tests\Browser;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Laravel\Dusk\Browser;
+use App\Models\Task;
 use Tests\DuskTestCase;
+use Laravel\Dusk\Browser;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class AddTacheTest extends DuskTestCase
 {
@@ -12,6 +13,7 @@ class AddTacheTest extends DuskTestCase
      * A Dusk test example.
      * @test
      */
+    private $addedTaskId;
     public function testAddTache(): void
     {
         $this->browse(function (Browser $browser) {
@@ -19,17 +21,21 @@ class AddTacheTest extends DuskTestCase
                 ->clickLink('Ajouter tâche')
                 ->select('project_id', '2')
                 ->type('name', 'planification') 
-                // ->assertSee('Nom')
-                ->type('description', 'description de planification') 
-                ->press('Ajouter');   
-                // ->seePageIs('/'); 
+                ->type('description', 'faire une planification') 
+                ->press('Ajouter');
+                
+                $latestTask = Task::latest()->first();
+                $this->addedTaskId = $latestTask->id;
         });
     }
-    public function testAddTacheDB(): void
+    public function testAddTacheDb(): void
     {
+        $latestTask = Task::latest()->first();
+        $this->addedTaskId = $latestTask->id;
         $this->assertDatabaseHas('tasks', [
+            'id' => $this->addedTaskId,
             'name' => 'planification',
-            'description' => 'description de planification',
+            'description' => 'faire une planification',
             'project_id' => '2',
         ]);
     }
