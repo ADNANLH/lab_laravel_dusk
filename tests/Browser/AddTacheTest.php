@@ -10,10 +10,10 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 class AddTacheTest extends DuskTestCase
 {
     /**
-     * A Dusk test example.
-     * @test
+     * @group add-tach
      */
     private $addedTaskId;
+
     public function testAddTache(): void
     {
         $this->browse(function (Browser $browser) {
@@ -23,15 +23,15 @@ class AddTacheTest extends DuskTestCase
                 ->type('name', 'planification') 
                 ->type('description', 'faire une planification') 
                 ->press('Ajouter');
-                
-                $latestTask = Task::latest()->first();
-                $this->addedTaskId = $latestTask->id;
         });
     }
+
     public function testAddTacheDb(): void
     {
+        
         $latestTask = Task::latest()->first();
         $this->addedTaskId = $latestTask->id;
+
         $this->assertDatabaseHas('tasks', [
             'id' => $this->addedTaskId,
             'name' => 'planification',
